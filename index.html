@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Basic SEO -->
+<meta name="title" content="Stopwatch Web App – Simple, Responsive Timer">
+<meta name="description" content="A sleek, responsive stopwatch app with start, pause, reset, and lap tracking. Built with HTML, CSS, and JavaScript. No downloads, just open and time anything!">
+<meta name="keywords" content="stopwatch, timer, online stopwatch, lap timer, JavaScript stopwatch, responsive timer, HTML CSS JS stopwatch">
+<meta name="author" content="Jamuna Rani">
+
+<!-- Open Graph (Facebook, LinkedIn, etc.) -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://yourusername.github.io/stopwatch-app/">
+<meta property="og:title" content="Stopwatch Web App – Track Time with Style">
+<meta property="og:description" content="Start, pause, reset, and record laps in a beautiful stopwatch interface built with HTML, CSS, and JavaScript.">
+<meta property="og:image" content="https://yourusername.github.io/stopwatch-app/assets/og-image.png">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:url" content="https://yourusername.github.io/stopwatch-app/">
+<meta name="twitter:title" content="Stopwatch Web App – Simple, Responsive Timer">
+<meta name="twitter:description" content="Stylish stopwatch with lap tracking built using HTML, CSS, and JavaScript. No installs needed.">
+<meta name="twitter:image" content="https://yourusername.github.io/stopwatch-app/assets/og-image.png">
+
+    <title>Stopwatch</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #87CEEB 0%, #4682B4 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #2c3e50;
+        }
+
+        .stopwatch-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            border: 3px solid #FF6B35;
+        }
+
+        .display {
+            font-size: 4rem;
+            font-weight: bold;
+            margin-bottom: 30px;
+            font-family: 'Courier New', monospace;
+            color: #FF6B35;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 120px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn:active {
+            transform: translateY(-1px);
+        }
+
+        .start-btn {
+            background: #32CD32;
+            color: white;
+            border: 2px solid #228B22;
+        }
+
+        .start-btn:hover {
+            background: #228B22;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(50, 205, 50, 0.3);
+        }
+
+        .pause-btn {
+            background: #FFD700;
+            color: #2c3e50;
+            border: 2px solid #FFA500;
+        }
+
+        .pause-btn:hover {
+            background: #FFA500;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(255, 215, 0, 0.3);
+        }
+
+        .reset-btn {
+            background: #FF6B35;
+            color: white;
+            border: 2px solid #E55B2B;
+        }
+
+        .reset-btn:hover {
+            background: #E55B2B;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(255, 107, 53, 0.3);
+        }
+
+        .lap-btn {
+            background: #4682B4;
+            color: white;
+            border: 2px solid #36648B;
+        }
+
+        .lap-btn:hover {
+            background: #36648B;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(70, 130, 180, 0.3);
+        }
+
+        .lap-section {
+            margin-top: 30px;
+        }
+
+        .lap-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: #FF6B35;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+            font-weight: bold;
+        }
+
+        .lap-times {
+            max-height: 300px;
+            overflow-y: auto;
+            background: linear-gradient(135deg, #F0F8FF 0%, #E6F3FF 100%);
+            border-radius: 15px;
+            padding: 20px;
+            border: 2px solid #87CEEB;
+        }
+
+        .lap-time {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #B0E0E6;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1rem;
+        }
+
+        .lap-time:last-child {
+            border-bottom: none;
+        }
+
+        .lap-number {
+            font-weight: bold;
+            color: #4682B4;
+        }
+
+        .lap-duration {
+            color: #FF6B35;
+            font-weight: 600;
+        }
+
+        .lap-total {
+            color: #32CD32;
+            font-weight: 600;
+        }
+
+        .no-laps {
+            color: #4682B4;
+            font-style: italic;
+            padding: 20px;
+        }
+
+        /* Scrollbar styling */
+        .lap-times::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .lap-times::-webkit-scrollbar-track {
+            background: #B0E0E6;
+            border-radius: 4px;
+        }
+
+        .lap-times::-webkit-scrollbar-thumb {
+            background: #4682B4;
+            border-radius: 4px;
+        }
+
+        .lap-times::-webkit-scrollbar-thumb:hover {
+            background: #36648B;
+        }
+
+        @media (max-width: 600px) {
+            .display {
+                font-size: 2.5rem;
+            }
+            
+            .btn {
+                padding: 12px 20px;
+                font-size: 1rem;
+                min-width: 100px;
+            }
+
+            .stopwatch-container {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="stopwatch-container">
+        <div class="display" id="display">00:00:00</div>
+        
+        <div class="controls">
+            <button class="btn start-btn" id="startBtn">Start</button>
+            <button class="btn pause-btn" id="pauseBtn" disabled>Pause</button>
+            <button class="btn lap-btn" id="lapBtn" disabled>Lap</button>
+            <button class="btn reset-btn" id="resetBtn">Reset</button>
+        </div>
+
+        <div class="lap-section">
+            <h3 class="lap-title">Lap Times</h3>
+            <div class="lap-times" id="lapTimes">
+                <div class="no-laps">No lap times recorded</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class Stopwatch {
+            constructor() {
+                this.startTime = 0;
+                this.elapsedTime = 0;
+                this.isRunning = false;
+                this.intervalId = null;
+                this.lapTimes = [];
+                this.lapCount = 0;
+                
+                this.display = document.getElementById('display');
+                this.startBtn = document.getElementById('startBtn');
+                this.pauseBtn = document.getElementById('pauseBtn');
+                this.lapBtn = document.getElementById('lapBtn');
+                this.resetBtn = document.getElementById('resetBtn');
+                this.lapTimesContainer = document.getElementById('lapTimes');
+                
+                this.bindEvents();
+            }
+            
+            bindEvents() {
+                this.startBtn.addEventListener('click', () => this.start());
+                this.pauseBtn.addEventListener('click', () => this.pause());
+                this.lapBtn.addEventListener('click', () => this.lap());
+                this.resetBtn.addEventListener('click', () => this.reset());
+            }
+            
+            start() {
+                if (!this.isRunning) {
+                    this.startTime = Date.now() - this.elapsedTime;
+                    this.isRunning = true;
+                    this.intervalId = setInterval(() => this.updateDisplay(), 10);
+                    
+                    this.startBtn.disabled = true;
+                    this.pauseBtn.disabled = false;
+                    this.lapBtn.disabled = false;
+                }
+            }
+            
+            pause() {
+                if (this.isRunning) {
+                    clearInterval(this.intervalId);
+                    this.isRunning = false;
+                    
+                    this.startBtn.disabled = false;
+                    this.pauseBtn.disabled = true;
+                    this.lapBtn.disabled = true;
+                }
+            }
+            
+            reset() {
+                clearInterval(this.intervalId);
+                this.startTime = 0;
+                this.elapsedTime = 0;
+                this.isRunning = false;
+                this.lapTimes = [];
+                this.lapCount = 0;
+                
+                this.updateDisplay();
+                this.updateLapDisplay();
+                
+                this.startBtn.disabled = false;
+                this.pauseBtn.disabled = true;
+                this.lapBtn.disabled = true;
+            }
+            
+            lap() {
+                if (this.isRunning) {
+                    // Get current elapsed time
+                    const currentTime = Date.now() - this.startTime;
+                    const lapDuration = this.lapCount === 0 ? currentTime : currentTime - this.lapTimes[this.lapTimes.length - 1].total;
+                    
+                    this.lapCount++;
+                    this.lapTimes.push({
+                        number: this.lapCount,
+                        duration: lapDuration,
+                        total: currentTime
+                    });
+                    
+                    this.updateLapDisplay();
+                }
+            }
+            
+            updateDisplay() {
+                if (this.isRunning) {
+                    this.elapsedTime = Date.now() - this.startTime;
+                }
+                
+                const time = this.formatTime(this.elapsedTime);
+                this.display.textContent = time;
+            }
+            
+            updateLapDisplay() {
+                if (this.lapTimes.length === 0) {
+                    this.lapTimesContainer.innerHTML = '<div class="no-laps">No lap times recorded</div>';
+                    return;
+                }
+                
+                let html = '';
+                for (let i = this.lapTimes.length - 1; i >= 0; i--) {
+                    const lap = this.lapTimes[i];
+                    html += `
+                        <div class="lap-time">
+                            <span class="lap-number">Lap ${lap.number}</span>
+                            <span class="lap-duration">${this.formatTime(lap.duration)}</span>
+                            <span class="lap-total">${this.formatTime(lap.total)}</span>
+                        </div>
+                    `;
+                }
+                
+                this.lapTimesContainer.innerHTML = html;
+            }
+            
+            formatTime(milliseconds) {
+                const totalSeconds = Math.floor(milliseconds / 1000);
+                const minutes = Math.floor(totalSeconds / 60);
+                const seconds = totalSeconds % 60;
+                const ms = Math.floor((milliseconds % 1000) / 10);
+                
+                return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}:${ms.toString().padStart(2, '0')}`;
+            }
+        }
+        
+        // Initialize the stopwatch when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            new Stopwatch();
+        });
+    </script>
+</body>
+</html>
